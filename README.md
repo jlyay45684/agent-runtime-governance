@@ -141,9 +141,9 @@ The visual identity and governance-oriented architecture direction are inspired 
 
 ## Screenshots
 
-### Runtime Overview
+### Runtime Health Signals
 
-![Runtime Overview](public/screenshot-overview.png)
+![Runtime Health Signals](public/screenshot-health-signals.png)
 
 ### Governance Validation
 
@@ -156,6 +156,10 @@ The visual identity and governance-oriented architecture direction are inspired 
 ### Tool Trace Inspection
 
 ![Tool Trace](public/screenshot-tool-trace.png)
+
+### Throughput and Cost
+
+![Throughput and Cost](public/screenshot-throughput.png)
 
 ---
 
