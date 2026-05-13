@@ -1,0 +1,179 @@
+{
+  "environment": "prod-tw-south-1",
+  "updatedAt": "2026-05-13 16:08:42",
+  "serviceObjectives": [
+    {
+      "label": "SLO",
+      "value": "99.93%"
+    },
+    {
+      "label": "p95",
+      "value": "812ms"
+    },
+    {
+      "label": "Budget",
+      "value": "$18.42"
+    }
+  ],
+  "runtimeStatus": [
+    {
+      "label": "Active agents",
+      "value": "42",
+      "state": "healthy",
+      "detail": "Planner, validator, executor pools within concurrency budget.",
+      "trend": "+8.3%"
+    },
+    {
+      "label": "Guardrail pass rate",
+      "value": "97.8%",
+      "state": "healthy",
+      "detail": "Policy checks passed across the last 1,284 tool actions.",
+      "trend": "+1.1%"
+    },
+    {
+      "label": "Validation queue",
+      "value": "11",
+      "state": "warning",
+      "detail": "Human review backlog elevated for finance-write actions.",
+      "trend": "+4"
+    },
+    {
+      "label": "Blocked calls",
+      "value": "3",
+      "state": "blocked",
+      "detail": "Denied by data residency and destructive action policies.",
+      "trend": "-2"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "evt_1001",
+      "time": "16:08:39",
+      "agent": "planner.alpha",
+      "title": "Execution plan compiled",
+      "description": "Generated 6-step remediation plan with tool boundary annotations and expected evidence outputs.",
+      "status": "completed",
+      "durationMs": 184
+    },
+    {
+      "id": "evt_1002",
+      "time": "16:08:40",
+      "agent": "policy.guard",
+      "title": "Governance preflight completed",
+      "description": "Validated role permissions, customer data scope, and approved tool set before execution.",
+      "status": "completed",
+      "durationMs": 92
+    },
+    {
+      "id": "evt_1003",
+      "time": "16:08:41",
+      "agent": "executor.delta",
+      "title": "Tool call retry scheduled",
+      "description": "Knowledge retrieval timed out at 760 ms; runtime selected cached context and queued retry with backoff.",
+      "status": "review",
+      "durationMs": 760
+    },
+    {
+      "id": "evt_1004",
+      "time": "16:08:42",
+      "agent": "policy.guard",
+      "title": "Destructive action blocked",
+      "description": "Write action requested against production billing data without change ticket and approval token.",
+      "status": "blocked",
+      "durationMs": 31
+    },
+    {
+      "id": "evt_1005",
+      "time": "16:08:42",
+      "agent": "summarizer.sigma",
+      "title": "Runtime summary streaming",
+      "description": "Synthesizing final outcome with trace IDs, policy evidence, token usage, and operator next steps.",
+      "status": "running",
+      "durationMs": 428
+    }
+  ],
+  "toolCalls": [
+    {
+      "id": "tool_201",
+      "tool": "vector.search",
+      "caller": "planner.alpha",
+      "status": "ok",
+      "latencyMs": 141,
+      "input": "incident_id=INC-4821, scope=runtime-policies",
+      "output": "12 matching policy records with confidence above 0.82"
+    },
+    {
+      "id": "tool_202",
+      "tool": "ticket.lookup",
+      "caller": "policy.guard",
+      "status": "ok",
+      "latencyMs": 88,
+      "input": "change_ticket=CHG-1197",
+      "output": "ticket active, owner verified, production write not approved"
+    },
+    {
+      "id": "tool_203",
+      "tool": "billing.write",
+      "caller": "executor.delta",
+      "status": "denied",
+      "latencyMs": 31,
+      "input": "customer_segment=enterprise, action=adjust_credit",
+      "output": "blocked: missing approval token and high-risk scope"
+    },
+    {
+      "id": "tool_204",
+      "tool": "runbook.fetch",
+      "caller": "summarizer.sigma",
+      "status": "retry",
+      "latencyMs": 760,
+      "input": "service=agent-runtime, runbook=governance-escalation",
+      "output": "timeout; retry scheduled with cached fallback context"
+    }
+  ],
+  "governance": {
+    "riskScore": 18,
+    "summary": "Runtime is allowed to continue in supervised mode. Production writes are gated until an approval token is attached to the execution context.",
+    "policies": [
+      {
+        "name": "PII minimization",
+        "result": "pass",
+        "evidence": "Prompt and tool payloads contain hashed account references only."
+      },
+      {
+        "name": "Production write control",
+        "result": "fail",
+        "evidence": "Billing adjustment requested without active approval token."
+      },
+      {
+        "name": "Tool allowlist",
+        "result": "pass",
+        "evidence": "All invoked tools are registered in the runtime manifest."
+      },
+      {
+        "name": "Human escalation",
+        "result": "warn",
+        "evidence": "Finance action requires operator review before resuming."
+      }
+    ]
+  },
+  "metrics": [
+    {
+      "label": "Input tokens",
+      "value": "84.2k",
+      "unit": "15 min",
+      "series": [36, 42, 48, 51, 58, 62, 73, 69, 81, 76, 88, 92]
+    },
+    {
+      "label": "Output tokens",
+      "value": "21.7k",
+      "unit": "15 min",
+      "series": [28, 31, 34, 38, 42, 39, 46, 52, 49, 57, 61, 66]
+    },
+    {
+      "label": "Runtime latency",
+      "value": "812",
+      "unit": "p95 ms",
+      "series": [44, 49, 47, 52, 66, 62, 73, 58, 54, 63, 71, 69]
+    }
+  ]
+}

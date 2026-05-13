@@ -1,26 +1,171 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #080b10;
+  --foreground: #e5edf7;
+  --panel-border: rgba(148, 163, 184, 0.12);
+  --panel-bg: rgba(7, 12, 18, 0.72);
+  --panel-highlight: rgba(255, 255, 255, 0.045);
+  --panel-shadow: 0 24px 72px rgba(0, 0, 0, 0.35);
+  --signal-cyan: 103 232 249;
+  --signal-emerald: 110 231 183;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.055) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 88%);
+  opacity: 0.22;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.025), transparent 22%),
+    radial-gradient(circle at 80% 0%, rgba(103, 232, 249, 0.055), transparent 30%),
+    radial-gradient(circle at 60% 30%, rgba(110, 231, 183, 0.03), transparent 24%);
+  opacity: 0.9;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.28);
+  color: #ffffff;
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(var(--signal-emerald), 0.38);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(var(--signal-emerald), 0);
+  }
+  100% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(var(--signal-emerald), 0);
+  }
+}
+
+@keyframes telemetry {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scaleY(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.03);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(180%);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 520ms ease-out both;
+}
+
+.animate-rise-delay {
+  animation: rise 640ms ease-out 90ms both;
+}
+
+.panel-glass {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--panel-border);
+  background:
+    linear-gradient(180deg, var(--panel-highlight), transparent 28%),
+    var(--panel-bg);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(20px);
+}
+
+.panel-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 35%,
+    transparent 65%
+  );
+  opacity: 0.7;
+}
+
+.live-dot {
+  animation: pulse-dot 2.4s ease-out infinite;
+}
+
+.telemetry-bar {
+  transform-origin: bottom;
+  animation: telemetry 2.8s ease-in-out infinite;
+}
+
+.telemetry-bar:nth-child(2n) {
+  animation-delay: 160ms;
+}
+
+.telemetry-bar:nth-child(3n) {
+  animation-delay: 320ms;
+}
+
+.signal-sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.signal-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 40%,
+    transparent 70%
+  );
+  animation: shimmer 6s linear infinite;
 }
