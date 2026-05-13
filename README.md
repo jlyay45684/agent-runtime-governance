@@ -2,7 +2,7 @@
 
 > A governance-oriented observability control plane for monitoring, validating, and auditing agentic AI runtime execution.
 
-![Agent Runtime Governance Hero](./public/demo-hero.png)
+![Agent Runtime Governance Hero](public/demo-hero.png)
 
 ---
 
@@ -143,19 +143,19 @@ The visual identity and governance-oriented architecture direction are inspired 
 
 ### Runtime Overview
 
-![Runtime Overview](./public/screenshot-overview.png)
+![Runtime Overview](public/screenshot-overview.png)
 
 ### Governance Validation
 
-![Governance Validation](./public/screenshot-governance.png)
+![Governance Validation](public/screenshot-governance.png)
 
 ### Runtime Event Timeline
 
-![Runtime Timeline](./public/screenshot-timeline.png)
+![Runtime Timeline](public/screenshot-timeline.png)
 
 ### Tool Trace Inspection
 
-![Tool Trace](./public/screenshot-tool-trace.png)
+![Tool Trace](public/screenshot-tool-trace.png)
 
 ---
 
